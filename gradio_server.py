@@ -39,7 +39,7 @@ css = """
 # Blocks：
 with gr.Blocks(title='日本の税金AI_ChatRobot', css=css) as instance:
     gr.Label('日本の税金AI_ChatRobot', container=False)
-    chatbot = gr.Chatbot(height=350, placeholder='<strong>AI ChatRobot</strong><br> こんにちは、何かお手伝いできますか?',type='messages')
+    chatbot = gr.Chatbot(height=550, placeholder='<strong>AI ChatRobot</strong><br> こんにちは、何かお手伝いできますか?',type='messages')
     msg = gr.Textbox(placeholder='質問を入力してください！', elem_classes='feedback', elem_id='bgc')
     clear = gr.ClearButton(value='会話の記録をクリア', components=[msg, chatbot])
 
