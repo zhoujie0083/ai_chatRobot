@@ -7,7 +7,8 @@
 
 # ----- ai_chatRobotの環境構築 -----
 
-## 本プロジェクトのPython Versionは 3.11
+## 本プロジェクトのPython Version
+Python Version = 3.11
 
 ## 本プロジェクト必須のPython Lib
 loguru  
