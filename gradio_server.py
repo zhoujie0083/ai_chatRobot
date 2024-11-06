@@ -11,7 +11,7 @@ def do_user(user_message, history):
     return '', history
 
 
-def do_it(history,):
+def do_it(history):
     print(history)
     question = history[-1][0]
     res = robot.invoke({'input': question})
@@ -34,7 +34,6 @@ def do_it(history,):
     #
     # resp = random.choice(responses)
 
-
     history[-1][1] = ''
 
 
@@ -53,8 +52,8 @@ def run_gradio():
     # Blocks：
     with gr.Blocks(title='日本の税金AI_ChatRobot', css=css) as instance:
         gr.Label('日本の税金AI_ChatRobot', container=False)
-        chatbot = gr.Chatbot(height=550, placeholder='<strong>AI ChatRobot</strong><br> こんにちは、何かお手伝いできますか?',type='messages')
-        msg = gr.Textbox(placeholder='質問を入力してください！', elem_classes='feedback', elem_id='bgc')
+        chatbot = gr.Chatbot(label='AI Robotの回答',height=550, placeholder='<strong>AI ChatRobot</strong><br> こんにちは、何かお手伝いできますか?')
+        msg = gr.Textbox(label='質問を入力してください',placeholder='質問を入力してください！', elem_classes='feedback', elem_id='bgc')
         clear = gr.ClearButton(value='会話の記録をクリア', components=[msg, chatbot])
 
 
@@ -62,7 +61,8 @@ def run_gradio():
 
 
     instance.queue()
-    instance.launch(server_name='127.0.0.1', server_port=8008,share=True)
+    instance.launch(server_name='127.0.0.1', server_port=8008)
+
 
 def init():
     # 初期化AI Robot

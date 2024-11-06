@@ -7,7 +7,6 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_text_splitters import CharacterTextSplitter
-from openai import models
 
 DB_DIR = 'faiss_db/'
 EMBEDDINGS = OpenAIEmbeddings()
@@ -20,23 +19,22 @@ def save_vectors_db():
     else:
         with open('datas.txt',encoding = 'utf8') as f:
             contents = f.read()
+        #
+        txt_splitter = CharacterTextSplitter(
+            separator= r'\d+\.\n',
+            is_separator_regex= True,
+            chunk_size=100,
+            chunk_overlap=0,
+            length_function=len
+        )
 
-    #
-    txt_splitter = CharacterTextSplitter(
-        separator=r'\d+\.\n',
-        is_separator_regex= True,
-        chunk_size=100,
-        chunk_overlap=0,
-        length_function=len
-    )
+        docs = txt_splitter.create_documents([contents])
+        db = FAISS.from_documents(docs,EMBEDDINGS)
+        db.save_local(DB_DIR)
 
-    docs = txt_splitter.create_documents([contents])
-    db = FAISS.from_documents(docs,EMBEDDINGS)
-    db.save_local(DB_DIR)
-
-    # 質問動作テスト
-    # result = db.similarity_search('')
-    # print(result)
+        # 質問動作テスト
+        # result = db.similarity_search('')
+        # print(result)
 
 
 def init_chain():
@@ -44,9 +42,11 @@ def init_chain():
     # step_1 Loadベクターデータベース
     db = FAISS.load_local(DB_DIR,EMBEDDINGS,allow_dangerous_deserialization= True)
     # step_2 プロンプトテンプレートの作成
-    system_prompt= """  
-    {context}
-    """
+    system_prompt= """あなたは質疑応答タスクのアシスタントです。
+                   検索結果のコンテキスト スニペットを使用して質問に答えます。
+                   この質問の答えがわからない場合は、「この問題がわかりません。スタッフに聞いてください。」と言ってください。
+                   最大 5 文を使用し、回答は簡潔にしてください。\n
+                   {context}"""
     prompt_template = ChatPromptTemplate.from_messages(
         [
             ('system',system_prompt),
@@ -61,7 +61,7 @@ def init_chain():
 
     model = ChatOpenAI(model_name='gpt-4o', temperature = 0.2)
     chain_1 = create_stuff_documents_chain(llm=model, prompt=prompt_template)
-    return create_retrieval_chain(retriever= retriever, combine_docs_chain= chain_1)
+    return create_retrieval_chain(retriever= retriever, combine_docs_chain= chain_1) #検索結果をプロンプトテンプレートへ送る
 
 
 if __name__ == '__main__':
