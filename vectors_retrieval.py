@@ -2,7 +2,6 @@ import os.path
 from platform import system
 
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains.question_answering.map_reduce_prompt import system_template
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
