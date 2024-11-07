@@ -7,8 +7,9 @@ pillow
 reportlab
 pandas~=2.2.2
 loguru
-langchain~=0.2.6
+langchain==0.2.16
 langchain-openai
+langChain-core==0.3.15
 gradio
 fastapi
 langchain-community
