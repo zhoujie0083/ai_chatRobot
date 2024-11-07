@@ -59,7 +59,7 @@ def init_chain():
     retriever = db.as_retriever(search_type='similarity_score_threshold', search_kwargs={"score_threshold": 0.7})
 
 
-    model = ChatOpenAI(model_name='gpt-4o', temperature = 0.2)
+    model = ChatOpenAI(model_name='gpt-4o-mini', temperature = 0.2)
     chain_1 = create_stuff_documents_chain(llm=model, prompt=prompt_template)
     return create_retrieval_chain(retriever= retriever, combine_docs_chain= chain_1) #検索結果をプロンプトテンプレートへ送る
 
